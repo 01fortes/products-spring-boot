@@ -3,13 +3,13 @@ spring:
     name: product-catalog-spring-boot
 
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/product_catalog
+    url: r2dbc:postgresql://${POSTGRES_HOST:localhost}:5432/product_catalog
     username: postgres
     password: postgres
 
   data:
     redis:
-      host: localhost
+      host: ${REDIS_HOST:localhost}
       port: 6379
       lettuce:
         pool:
@@ -41,11 +41,20 @@ management:
         enabled: true
     tags:
       application: ${spring.application.name}
+  server:
+    port: 8081
+    context-path: /actuator
+
+  otlp:
+    metrics:
+      export:
+        url: http://${OTEL_COLLECTOR_HOST:localhost}:${OTEL_COLLECTOR_PORT:4318}/v1/metrics
+        step: 15s
 
 otel:
   propagators:
     - tracecontext
   exporter:
     otlp:
+      endpoint: http://${OTEL_COLLECTOR_HOST:localhost}:${OTEL_COLLECTOR_PORT:4318}
       protocol: http/protobuf
-
