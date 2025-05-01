@@ -1,6 +1,6 @@
 package com.jsamkt.learn.productcatalogspringboot.filter;
 
-import org.springframework.data.redis.core.ReactiveRedisTemplate;
+//import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
@@ -10,11 +10,11 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class AuthFilter implements WebFilter {
-    private final ReactiveRedisTemplate<String, Object> redis;
+//    private final ReactiveRedisTemplate<String, Object> redis;
 
-    public AuthFilter(ReactiveRedisTemplate<String, Object> redis) {
-        this.redis = redis;
-    }
+//    public AuthFilter(ReactiveRedisTemplate<String, Object> redis) {
+//        this.redis = redis;
+//    }
     
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -30,12 +30,13 @@ public class AuthFilter implements WebFilter {
         }
         
         var token = authorization.substring(7);
-        return redis.opsForValue().get("banned:" + token)
-                .flatMap(banned -> {
-                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                    return Mono.empty();
-                })
-                .switchIfEmpty(chain.filter(exchange))
-                .then();
+        return chain.filter(exchange);
+//        return redis.opsForValue().get("banned:" + token)
+//                .flatMap(banned -> {
+//                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+//                    return Mono.empty();
+//                })
+//                .switchIfEmpty(chain.filter(exchange))
+//                .then();
     }
 }
