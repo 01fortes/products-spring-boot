@@ -18,28 +18,19 @@ public class ProductController {
         this.service = service;
     }
 
-    @GetMapping("/")
+    @GetMapping("/all/")
     public Flux<Product> findAll() {
         return service.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/one/{id}/")
     public Mono<Product> findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("/create/")
     public Mono<Product> save(@RequestBody Product product) {
         return service.save(product);
     }
 
-    @PutMapping("/")
-    public Mono<Product> update(@RequestBody Product product) {
-        return service.save(product);
-    }
-
-    @DeleteMapping("/{id}")
-    public Mono<Void> deleteById(@PathVariable("id") Long id) {
-        return service.deleteById(id);
-    }
 }
